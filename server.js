@@ -1,4 +1,4 @@
-// require('dotenv').config()
+require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
@@ -10,13 +10,13 @@ const postsRoute = require('./routes/posts')
 const usersRoute = require('./routes/users')
 const rolesRoute = require('./routes/roles')
 const path = require('path')
-// const cors = require('cors')
+const cors = require('cors')
 
 const app = express()
 
-// app.use(cors({
-//   origin: 'http://localhost:3000'
-// }))
+app.use(cors({
+  origin: 'https://whatnew.onrender.com'
+}))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
