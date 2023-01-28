@@ -48,6 +48,20 @@ export default function Login() {
             autoComplete="current-password" />
         </div>
 
+        <div className="account">
+          <h5 className="acc-role">Role: Admin</h5>
+          <p className="acc-email">Email: admin@dev.com</p>
+          <p className="acc-password mb-1">Password: admin123</p>
+
+          <h5 className="acc-role">Role: Editor</h5>
+          <p className="acc-email">Email: votey@editor.com</p>
+          <p className="acc-password mb-1">Password: votey123</p>
+
+          <h5 className="acc-role">Role: Author</h5>
+          <p className="acc-email">Email: vikol@author.com</p>
+          <p className="acc-password">Password: vikol123</p>
+        </div>
+
         <div className="btn-right">
           <button disabled={isLoading} className='btn-submit'>ចូលប្រើគណនី</button>
         </div>

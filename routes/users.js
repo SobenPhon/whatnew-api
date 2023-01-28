@@ -33,7 +33,7 @@ router.post('/login', loginUser)
 
 // SIGNUP route
 // router.post('/signup', verifyToken, signupUser)
-router.post('/signup', signupUser)
+router.post('/signup', requireAuth, signupUser)
 
 // UPDATE route
 router.patch('/:id', setUser, requireAuth, authEditUser, updateUser)

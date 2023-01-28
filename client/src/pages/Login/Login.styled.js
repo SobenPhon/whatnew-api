@@ -170,6 +170,13 @@ export const LoginStyle = styled.section`
     }
   }
 
+  .account {
+    text-align: center;
+    .acc-role {
+      font-size: 15px;
+    }
+  }
+
   .btn-right {
     text-align: center;
   }
