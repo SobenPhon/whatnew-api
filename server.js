@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
@@ -8,13 +9,15 @@ const categoriesRoute = require('./routes/categories')
 const postsRoute = require('./routes/posts')
 const usersRoute = require('./routes/users')
 const rolesRoute = require('./routes/roles')
+const dcryptRoute = require('./routes/dcryptpassword')
 const path = require('path')
 const cors = require('cors')
 
 const app = express()
 
 app.use(cors({
-  origin: 'https://whatnew.onrender.com'
+  // origin: 'https://whatnew.onrender.com'
+  origin: 'http://localhost:3000'
 }))
 
 app.use(express.json())
@@ -30,6 +33,7 @@ app.use('/api/categories', categoriesRoute)
 app.use('/api/posts', postsRoute)
 app.use('/api/users', usersRoute)
 app.use('/api/roles', rolesRoute)
+app.use('/api/dcryptpassword', dcryptRoute)
 
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500

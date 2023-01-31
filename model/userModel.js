@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
 const validator = require('validator')
+const bcrypt = require('bcrypt')
+const CryptoJS = require('crypto-js')
 
 const Schema = mongoose.Schema
 
@@ -58,11 +59,19 @@ userSchema.statics.signup = async function (firstName, lastName, username, email
     throw Error('Email already in use')
   }
 
-  // password encryption
-  const salt = await bcrypt.genSalt(10)
-  const hash = await bcrypt.hash(password, salt)
+  // password encryption with bcrypt
+  // const salt = await bcrypt.genSalt(10)
+  // const hash = await bcrypt.hash(password, salt)
 
-  const user = await this.create({ firstName, lastName, username, email, password: hash, role, profile })
+  // password encryption with cryto-js
+  const encrypted = CryptoJS.AES.encrypt(password, process.env.SECRET_KEY).toString()
+  console.log('Encrypt: ', encrypted)
+
+  // const decryption = CryptoJS.AES.decrypt(encryption).toString(CryptoJS.enc.Utf8)
+
+  // console.log('Decryption: ', decryption)
+
+  const user = await this.create({ firstName, lastName, username, email, password: encrypted, role, profile })
 
   return user
 }
@@ -84,8 +93,16 @@ userSchema.statics.login = async function (email, password) {
     throw Error('Incorrect email')
   }
 
-  const match = await bcrypt.compare(password, user.password)
+  // match password with bcrypt
+  // const match = await bcrypt.compare(password, user.password)
   // const match = password === user.password
+
+  // decrypt password with crypto-js
+  const decrypted = CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8)
+
+  // console.log('password: ', password, 'Decryption: ', decrypted)
+
+  const match = password === decrypted
 
   if (!match) {
     throw Error('Incorrect password')

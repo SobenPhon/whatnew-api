@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const { scopedUser, scopedUserPost } = require('../permissions/users')
 const createError = require('../utils/error')
 const bcrypt = require('bcrypt')
+const CryptoJS = require('crypto-js')
 
 const createToken = (_id, role) => {
   return jwt.sign({
@@ -18,6 +19,7 @@ const createToken = (_id, role) => {
 const getUsers = async (req, res, next) => {
   try {
     const users = await User.find({}).sort({ createdAt: 1 })
+    // Only admin can see all users
     res.status(200).json(scopedUser(req.user, users))
   } catch (error) {
     // res.status(404).json({ error: error.message })
@@ -137,11 +139,14 @@ const updateUser = async (req, res) => {
     return res.status(404).json({ error: 'No such user from mongoose' })
   }
 
-  // password encryption
-  const salt = await bcrypt.genSalt(10)
-  const hash = await bcrypt.hash(password, salt)
+  // password encryption with bcrypt
+  // const salt = await bcrypt.genSalt(10)
+  // const hash = await bcrypt.hash(password, salt)
 
-  const updatedUser = await User.findOneAndUpdate({ _id: id }, { firstName, lastName, username, email, password: hash, role, profile }, { new: true })
+  // password encryption with crypto-js
+  const encrypted = CryptoJS.AES.encrypt(password, process.env.SECRET_KEY).toString()
+
+  const updatedUser = await User.findOneAndUpdate({ _id: id }, { firstName, lastName, username, email, password: encrypted, role, profile }, { new: true })
 
   if (!updatedUser) {
     return res.status(400).json({ error: 'No such user' })
